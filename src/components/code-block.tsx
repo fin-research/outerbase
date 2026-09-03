@@ -1,8 +1,19 @@
 import React from "react";
-import { createHighlighter } from "shiki";
-import type { BundledLanguage } from "shiki/bundle/full";
+import bash from "@shikijs/langs/bash";
+import css from "@shikijs/langs/css";
+import html from "@shikijs/langs/html";
+import http from "@shikijs/langs/http";
+import javascript from "@shikijs/langs/javascript";
+import json from "@shikijs/langs/json";
+import jsx from "@shikijs/langs/jsx";
+import markdown from "@shikijs/langs/markdown";
+import tsx from "@shikijs/langs/tsx";
+import typescript from "@shikijs/langs/typescript";
+import dracula from "@shikijs/themes/dracula";
+import { createHighlighterCore } from "shiki/core";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
-const ALLOWED_LANGS: BundledLanguage[] = [
+const ALLOWED_LANGS = [
   "javascript",
   "typescript",
   "html",
@@ -13,30 +24,42 @@ const ALLOWED_LANGS: BundledLanguage[] = [
   "http",
   "jsx",
   "tsx",
-];
+] as const;
+
+type AllowedLanguage = (typeof ALLOWED_LANGS)[number];
 
 interface CodeBlockProps {
   children: string;
   className?: string;
 }
 
-async function getHighlighter() {
-  return await createHighlighter({
-    themes: ["dracula"],
-    langs: ALLOWED_LANGS,
-  });
-}
+const highlighterPromise = createHighlighterCore({
+  themes: [dracula],
+  langs: [
+    javascript,
+    typescript,
+    html,
+    css,
+    json,
+    markdown,
+    bash,
+    http,
+    jsx,
+    tsx,
+  ],
+  engine: createJavaScriptRegexEngine(),
+});
 
-function getValidLang(className?: string): BundledLanguage | "text" {
+function getValidLang(className?: string): AllowedLanguage | "text" {
   const language = className ? className.replace(/language-/, "") : "text";
-  return ALLOWED_LANGS.includes(language as BundledLanguage)
-    ? (language as BundledLanguage)
+  return ALLOWED_LANGS.includes(language as AllowedLanguage)
+    ? (language as AllowedLanguage)
     : "text";
 }
 
 async function CodeBlockInner({ children, className }: CodeBlockProps) {
   const validLang = getValidLang(className);
-  const highlighter = await getHighlighter();
+  const highlighter = await highlighterPromise;
   const highlightedCode = highlighter.codeToHtml(children, {
     lang: validLang,
     themes: {

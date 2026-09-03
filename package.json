@@ -97,7 +97,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^0.6.6",
+    "@opennextjs/cloudflare": "1.15.1",
+    "@shikijs/langs": "1.29.2",
+    "@shikijs/themes": "1.29.2",
     "@tailwindcss/postcss": "^4.0.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -121,12 +123,12 @@
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "shiki": "^1.12.0",
+    "shiki": "1.29.2",
     "showdown": "^2.1.0",
     "tailwindcss": "^4.0.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5",
-    "wrangler": "^4.6.0"
+    "wrangler": "4.59.2"
   }
 }
